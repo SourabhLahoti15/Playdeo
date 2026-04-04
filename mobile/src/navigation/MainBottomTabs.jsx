@@ -41,11 +41,13 @@ const HeaderLeft = () => {
 
 const HeaderRight = () => {
     const navigation = useNavigation();
-    const { token } = useContext(AuthContext);
+    const { user, token } = useContext(AuthContext);
 
     const handleUserPress = async () => {
         if (token) {
-            navigation.navigate("User");
+            navigation.navigate("Profile", {
+                userId: user._id
+            });
         } else {
             navigation.navigate("Auth");
         }
@@ -53,8 +55,8 @@ const HeaderRight = () => {
     const isDark = true;
     return (
         <View style={styles.header_right}>
-            <Icon name={isDark ? "sunny" : "moon"} size={30} color="white"/>
-            <Pressable>
+            <Icon name={isDark ? "sunny" : "moon"} size={30} color="white" />
+            <Pressable onPress={() => navigation.navigate("Notification")}>
                 <Icon name="notifications-outline" size={30} color="#fff" />
             </Pressable>
             <Pressable onPress={handleUserPress}>

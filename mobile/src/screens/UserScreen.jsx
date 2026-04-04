@@ -45,34 +45,4 @@ const UserScreen = () => {
     </>
   )
 }
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: "#000"
-  },
-  btn: {
-    padding: 10,
-    width: "100%",
-    borderBottomWidth: 1,
-    borderColor: "gray"
-  },
-  text: {
-    color: "white",
-    fontSize: 16
-  },
-  logout_btn: {
-    position: "absolute",
-    left: 10,
-    right: 10,
-    padding: 10,
-    backgroundColor: "rgba(255, 0, 0, 0.8)",
-    borderRadius: 10,
-    alignItems: "center"
-  },
-  logout_text: {
-    color: "white",
-    fontSize: 16,
-    fontWeight: "bold"
-  }
-})
 export default UserScreen
