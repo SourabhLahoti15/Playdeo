@@ -7,6 +7,8 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useNavigation } from '@react-navigation/native';
 import { useContext } from 'react';
 import { AuthContext } from '../context/AuthContext';
+import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const Drawer = createDrawerNavigator();
 
@@ -26,21 +28,36 @@ function CustomDrawer(props) {
     }
     return (
         <DrawerContentScrollView {...props} contentContainerStyle={styles.container}>
+            {/* bookmarks */}
             <Pressable style={styles.btn} onPress={() => {
                 props.navigation.closeDrawer();
                 props.navigation.getParent()?.navigate("Bookmarks");
             }}>
+                <MaterialCommunityIcons name="bookmark-outline" size={24} color="#fff" />
                 <Text style={styles.text}>Bookmarks</Text>
             </Pressable>
+            {/* about */}
             <Pressable style={styles.btn}>
+                <MaterialCommunityIcons name="information-outline" size={24} color="#fff" />
                 <Text style={styles.text}>About</Text>
             </Pressable>
+            {/* settings */}
             <Pressable style={styles.btn} onPress={() => {
                 props.navigation.closeDrawer();
                 props.navigation.getParent()?.navigate("Settings");
             }}>
+                <MaterialCommunityIcons name="cog-outline" size={24} color="#fff" />
                 <Text style={styles.text}>Settings</Text>
             </Pressable>
+            {/* history */}
+            <Pressable style={styles.btn} onPress={() => {
+                props.navigation.closeDrawer();
+                props.navigation.getParent()?.navigate("Settings");
+            }}>
+                <MaterialCommunityIcons name="history" size={24} color="#fff" />
+                <Text style={styles.text}>History</Text>
+            </Pressable>
+            {/* logout */}
             <Pressable style={[styles.logout_btn, { bottom: insets.bottom }]} onPress={handleLogout}>
                 <Text style={styles.logout_text}>Logout</Text>
             </Pressable>
@@ -66,6 +83,9 @@ const styles = StyleSheet.create({
         backgroundColor: "#000"
     },
     btn: {
+        flexDirection: "row",
+        alignItems: "center",
+        gap: 10,
         padding: 10,
         width: "100%",
         borderBottomWidth: 1,
@@ -73,7 +93,7 @@ const styles = StyleSheet.create({
     },
     text: {
         color: "white",
-        fontSize: 16
+        fontSize: 17
     },
     logout_btn: {
         position: "absolute",

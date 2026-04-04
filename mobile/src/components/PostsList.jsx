@@ -36,4 +36,4 @@ const PostsList = ({ posts, index = 0, onEndReached }) => {
     )
 }
 
-export default PostsList
+export default PostsList;

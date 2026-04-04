@@ -1,19 +1,23 @@
 import React, { useEffect, useState } from "react";
-import { View, FlatList, Image, Pressable, StyleSheet, Dimensions } from "react-native";
+import { FlatList, Image, Pressable, StyleSheet, Dimensions } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import BASE_URL from "../api/api";
 
 const windowWidth = Dimensions.get("window").width;
 const itemSize = windowWidth / 2;
 
-const ProfileVideosTab = ({ userId }) => {
+const BookmarksVideosTab = ({ token }) => {
     const [videos, setVideos] = useState([]);
     const navigation = useNavigation();
     const [page, setPage] = useState(1);
 
-    const getUserVideos = async () => {
+    const getBookmarkedVideos = async () => {
         try {
-            const res = await fetch(`${BASE_URL}/api/videos/user/${userId}?page=${page}`);
+            const res = await fetch(`${BASE_URL}/api/bookmarks/videos?page=${page}`, {
+                headers: {
+                    Authorization: `Bearer ${token}`
+                }
+            });
             const data = await res.json();
             setVideos(prev => [...prev, ...data]);
         } catch (error) {
@@ -22,7 +26,7 @@ const ProfileVideosTab = ({ userId }) => {
     };
 
     useEffect(() => {
-        getUserVideos();
+        getBookmarkedVideos();
     }, [page]);
 
     const renderItem = ({ item }) => (
@@ -58,11 +62,11 @@ const styles = StyleSheet.create({
     },
     thumbnail: {
         width: itemSize,
-        height: itemSize/1.5,
+        height: itemSize / 1.5,
         backgroundColor: "#222",
         borderWidth: 0.5,
         borderColor: "#ffffff"
     }
 });
 
-export default ProfileVideosTab;
+export default BookmarksVideosTab;

@@ -6,14 +6,18 @@ import { useNavigation } from "@react-navigation/native";
 const windowWidth = Dimensions.get("window").width;
 const itemSize = windowWidth / 3;
 
-const ProfileShortsTab = ({ userId }) => {
+const BookmarksShortsTab = ({ token }) => {
     const [shorts, setShorts] = useState([]);
     const [page, setPage] = useState(1);
     const navigation = useNavigation();
 
-    const getUserShorts = async () => {
+    const getBookmarkedShorts = async () => {
         try {
-            const res = await fetch(`${BASE_URL}/api/shorts/user/${userId}?page=${page}`);
+            const res = await fetch(`${BASE_URL}/api/bookmarks/shorts?page=${page}`, {
+                headers: {
+                    Authorization: `Bearer ${token}`
+                }
+            });
             const data = await res.json();
             setShorts(prev => [...prev, ...data]);
         } catch (error) {
@@ -22,13 +26,13 @@ const ProfileShortsTab = ({ userId }) => {
     };
 
     useEffect(() => {
-        getUserShorts();
+        getBookmarkedShorts();
     }, [page]);
 
     const renderItem = ({ item, index }) => (
         <Pressable onPress={() => (
-            navigation.navigate("ProfileShorts", {
-                userId,
+            navigation.navigate("BookmarksShorts", {
+                token,
                 index
             })
         )}>
@@ -54,6 +58,7 @@ const ProfileShortsTab = ({ userId }) => {
 
 const styles = StyleSheet.create({
     container: {
+        flex: 1,
         backgroundColor: "#000"
     },
     image: {
@@ -64,4 +69,4 @@ const styles = StyleSheet.create({
     },
 });
 
-export default ProfileShortsTab;
+export default BookmarksShortsTab;

@@ -14,6 +14,7 @@ import defaultAvatar from "../utils/defaultAvatar";
 import Video from "react-native-video";
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import BASE_URL from '../api/api';
+import Toast from 'react-native-toast-message';
 
 const ShortsList = ({ shorts, setShorts, initialIndex = 0, bottomOffset = 0, onEndReached }) => {
     // const windowHeight = Dimensions.get("window").height;
@@ -26,6 +27,14 @@ const ShortsList = ({ shorts, setShorts, initialIndex = 0, bottomOffset = 0, onE
     const [bookmarked, setBookmarked] = useState({});
 
     const likeShort = async (id) => {
+        if (!token) {
+            Toast.show({
+                type: "error",
+                text1: "Error",
+                text2: "Login to like short."
+            });
+            return;
+        }
         try {
             const res = await fetch(`${BASE_URL}/api/shorts/${id}/like`, {
                 method: "POST",
@@ -47,6 +56,14 @@ const ShortsList = ({ shorts, setShorts, initialIndex = 0, bottomOffset = 0, onE
     };
 
     const dislikeShort = async (id) => {
+        if (!token) {
+            Toast.show({
+                type: "error",
+                text1: "Error",
+                text2: "Login to dislike short."
+            });
+            return;
+        }
         try {
             const res = await fetch(`${BASE_URL}/api/shorts/${id}/dislike`, {
                 method: "POST",
@@ -68,6 +85,7 @@ const ShortsList = ({ shorts, setShorts, initialIndex = 0, bottomOffset = 0, onE
     };
 
     const checkBookmark = async (id) => {
+        if (!token) return;
         try {
             const res = await fetch(`${BASE_URL}/api/bookmarks/short/${id}`, {
                 headers: {
@@ -85,6 +103,14 @@ const ShortsList = ({ shorts, setShorts, initialIndex = 0, bottomOffset = 0, onE
     };
 
     const bookmarkShort = async (id) => {
+        if (!token) {
+            Toast.show({
+                type: "error",
+                text1: "Error",
+                text2: "Login to bookmark short."
+            });
+            return;
+        }
         const prevState = bookmarked;
         setBookmarked(prev => ({
             ...prev,

@@ -9,6 +9,7 @@ import { PostContext } from "../context/PostContext";
 import defaultAvatar from '../utils/defaultAvatar'
 import followUser from '../utils/followUser'
 import unfollowUser from '../utils/unfollowUser'
+import Toast from 'react-native-toast-message';
 
 const windowWidth = Dimensions.get("window").width;
 
@@ -39,6 +40,7 @@ const PostCard = ({ post, variant }) => {
     // const imagewidthRef = useRef(0);
 
     const checkBookmarkStatus = async () => {
+        if (!token) return;
         try {
             const res = await fetch(`${BASE_URL}/api/bookmarks/post/${post._id}`, {
                 method: 'GET',
@@ -54,6 +56,7 @@ const PostCard = ({ post, variant }) => {
     };
 
     const checkFollowStatus = async () => {
+        if (!token) return;
         try {
             const res = await fetch(`${BASE_URL}/api/follow/status/${post.user._id}`, {
                 headers: { Authorization: `Bearer ${token}` }
@@ -66,6 +69,14 @@ const PostCard = ({ post, variant }) => {
     };
 
     const likePost = async (postId) => {
+        if (!token) {
+            Toast.show({
+                type: "error",
+                text1: "Error",
+                text2: "Login to like post."
+            });
+            return;
+        }
         try {
             const res = await fetch(`${BASE_URL}/api/posts/${postId}/like`, {
                 method: 'PUT',
@@ -84,6 +95,14 @@ const PostCard = ({ post, variant }) => {
     }
 
     const dislikePost = async (postId) => {
+        if (!token) {
+            Toast.show({
+                type: "error",
+                text1: "Error",
+                text2: "Login to dislike post."
+            });
+            return;
+        }
         try {
             const res = await fetch(`${BASE_URL}/api/posts/${postId}/dislike`, {
                 method: 'PUT',
@@ -102,6 +121,14 @@ const PostCard = ({ post, variant }) => {
     }
 
     const bookmarkPost = async (postId) => {
+        if (!token) {
+            Toast.show({
+                type: "error",
+                text1: "Error",
+                text2: "Login to bookmark post."
+            });
+            return;
+        }
         const prev = bookmarked;
         setBookmarked(!prev);
         try {
@@ -113,6 +140,11 @@ const PostCard = ({ post, variant }) => {
             })
             const data = await res.json();
             setBookmarked(data.bookmarked);
+            Toast.show({
+                type: "success",
+                text1: "Success",
+                text2: "bookmarked"
+            })
         } catch (error) {
             setBookmarked(prev);
             console.log(error);

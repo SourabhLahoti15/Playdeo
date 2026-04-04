@@ -11,6 +11,7 @@ import Video from "react-native-video";
 import defaultAvatar from '../utils/defaultAvatar';
 import followUser from '../utils/followUser'
 import unfollowUser from '../utils/unfollowUser'
+import Toast from 'react-native-toast-message';
 
 const VideoCard = ({ video, variant = "feed" }) => {
     const { user, token } = useContext(AuthContext);
@@ -33,6 +34,7 @@ const VideoCard = ({ video, variant = "feed" }) => {
     }, [video._id, user, token]);
 
     const checkBookmarkStatus = async () => {
+        if (!token) return;
         try {
             const res = await fetch(`${BASE_URL}/api/bookmarks/video/${video._id}`, {
                 method: 'GET',
@@ -48,6 +50,7 @@ const VideoCard = ({ video, variant = "feed" }) => {
     };
 
     const checkFollowStatus = async () => {
+        if (!token) return;
         try {
             const res = await fetch(`${BASE_URL}/api/follow/status/${video.user._id}`, {
                 headers: { Authorization: `Bearer ${token}` }
@@ -60,6 +63,14 @@ const VideoCard = ({ video, variant = "feed" }) => {
     };
 
     const likeVideo = async (videoId) => {
+        if (!token) {
+            Toast.show({
+                type: "error",
+                text1: "Error",
+                text2: "Login to like video."
+            });
+            return;
+        }
         try {
             const res = await fetch(`${BASE_URL}/api/videos/${videoId}/like`, {
                 method: "PUT",
@@ -79,6 +90,14 @@ const VideoCard = ({ video, variant = "feed" }) => {
     };
 
     const dislikeVideo = async (videoId) => {
+        if (!token) {
+            Toast.show({
+                type: "error",
+                text1: "Error",
+                text2: "Login to dislike video."
+            });
+            return;
+        }
         try {
             const res = await fetch(`${BASE_URL}/api/videos/${videoId}/dislike`, {
                 method: "PUT",
@@ -96,6 +115,14 @@ const VideoCard = ({ video, variant = "feed" }) => {
     };
 
     const bookmarkVideo = async (videoId) => {
+        if (!token) {
+            Toast.show({
+                type: "error",
+                text1: "Error",
+                text2: "Login to bookmark video."
+            });
+            return;
+        }
         const prev = bookmarked;
         setBookmarked(!prev);
         try {

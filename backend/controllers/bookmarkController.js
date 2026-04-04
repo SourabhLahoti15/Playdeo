@@ -1,12 +1,39 @@
 const Bookmark = require("../models/Bookmark");
 
-exports.bookmarkPost = async (req, res) => {
+exports.checkBookmark = async (req, res) => {
+    const model = {
+        post: "Post",
+        video: "Video",
+        short: "Short"
+    }
     try {
         const userId = req.user.userId;
         const { entityType, entityId } = req.params;
+        const entityModel = model[entityType];
         const existing = await Bookmark.findOne({
             user: userId,
-            entityType,
+            entityModel,
+            entityId
+        });
+        res.json({ bookmarked: !!existing });
+    } catch (error) {
+        res.status(500).json({ message: error.message });
+    }
+};
+
+exports.bookmarkPost = async (req, res) => {
+    const model = {
+        post: "Post",
+        video: "Video",
+        short: "Short"
+    }
+    try {
+        const userId = req.user.userId;
+        const { entityType, entityId } = req.params;
+        const entityModel = model[entityType];
+        const existing = await Bookmark.findOne({
+            user: userId,
+            entityModel,
             entityId
         });
         if (existing) {
@@ -15,7 +42,7 @@ exports.bookmarkPost = async (req, res) => {
         }
         await Bookmark.create({
             user: userId,
-            entityType,
+            entityModel,
             entityId
         });
         res.json({ bookmarked: true });
@@ -24,32 +51,77 @@ exports.bookmarkPost = async (req, res) => {
     }
 };
 
-exports.getBookmarks = async (req, res) => {
+exports.getBookmarkedPosts = async (req, res) => {
+    const page = parseInt(req.query.page) || 1;
+    const limit = 10;
+    const skip = (page - 1) * limit;
     try {
         const userId = req.user.userId;
         const bookmarks = await Bookmark.find({
-            user: userId
+            user: userId,
+            entityModel: "Post"
+        }).populate({
+            path: "entityId",
+            populate: {
+                path: "user",
+                select: "-password"
+            }
         })
-            .populate("entityId")
-            .populate("user", "-password")
-            .sort({ createdAt: -1 });
-        res.json(bookmarks);
+            .sort({ createdAt: -1 })
+            .skip(skip)
+            .limit(limit);
+        res.json(bookmarks.map(b => b.entityId));
     } catch (error) {
         res.status(500).json({ message: error.message });
     }
 };
 
-exports.checkBookmark = async (req, res) => {
+exports.getBookmarkedVideos = async (req, res) => {
+    const page = parseInt(req.query.page) || 1;
+    const limit = 10;
+    const skip = (page - 1) * limit;
     try {
         const userId = req.user.userId;
-        const { entityType, entityId } = req.params;
-        const existing = await Bookmark.findOne({
+        const bookmarks = await Bookmark.find({
             user: userId,
-            entityType,
-            entityId
-        });
-        res.json({ bookmarked: !!existing });
+            entityModel: "Video"
+        }).populate({
+            path: "entityId",
+            populate: {
+                path: "user",
+                select: "-password"
+            }
+        })
+            .sort({ createdAt: -1 })
+            .skip(skip)
+            .limit(limit);
+        res.json(bookmarks.map(b => b.entityId));
     } catch (error) {
         res.status(500).json({ message: error.message });
     }
-}
+};
+
+exports.getBookmarkedShorts = async (req, res) => {
+    const page = parseInt(req.query.page) || 1;
+    const limit = 10;
+    const skip = (page - 1) * limit;
+    try {
+        const userId = req.user.userId;
+        const bookmarks = await Bookmark.find({
+            user: userId,
+            entityModel: "Short"
+        }).populate({
+            path: "entityId",
+            populate: {
+                path: "user",
+                select: "-password"
+            }
+        })
+            .sort({ createdAt: -1 })
+            .skip(skip)
+            .limit(limit);
+        res.json(bookmarks.map(b => b.entityId));
+    } catch (error) {
+        res.status(500).json({ message: error.message });
+    }
+};

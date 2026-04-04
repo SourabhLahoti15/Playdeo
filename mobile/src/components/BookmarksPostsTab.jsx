@@ -1,47 +1,48 @@
-import React, { useContext, useEffect, useState } from "react";
-import { Dimensions, FlatList, Image, Pressable, StyleSheet } from "react-native";
-import BASE_URL from "../api/api";
+import React, { useEffect, useState } from "react";
+import { FlatList, Image, Pressable, Dimensions, StyleSheet } from "react-native";
 import { useNavigation } from "@react-navigation/native";
+import BASE_URL from "../api/api";
 
 const windowWidth = Dimensions.get("window").width;
 const itemSize = windowWidth / 3;
 
-const ProfileShortsTab = ({ userId }) => {
-    const [shorts, setShorts] = useState([]);
-    const [page, setPage] = useState(1);
+const BookmarksPostsTab = ({ token }) => {
+    const [posts, setPosts] = useState([]);
     const navigation = useNavigation();
+    const [page, setPage] = useState(1);
 
-    const getUserShorts = async () => {
+    const getBookmarkedPosts = async () => {
         try {
-            const res = await fetch(`${BASE_URL}/api/shorts/user/${userId}?page=${page}`);
+            const res = await fetch(`${BASE_URL}/api/bookmarks/posts?page=${page}`, {
+                headers: {
+                    Authorization: `Bearer ${token}`
+                }
+            });
             const data = await res.json();
-            setShorts(prev => [...prev, ...data]);
+            setPosts(prev => [...prev, ...data]);
         } catch (error) {
             console.log(error);
         }
     };
 
     useEffect(() => {
-        getUserShorts();
+        getBookmarkedPosts();
     }, [page]);
 
     const renderItem = ({ item, index }) => (
-        <Pressable onPress={() => (
-            navigation.navigate("ProfileShorts", {
-                userId,
-                index
-            })
-        )}>
+        <Pressable
+            onPress={() => navigation.navigate("BookmarksPosts", { token: token, index: index })}
+        >
             <Image
                 style={styles.image}
-                source={{ uri: `${BASE_URL}/${item.thumbnail}` }}
+                source={{ uri: `${BASE_URL}/${item.images?.[0]}` }}
             />
         </Pressable>
     );
 
     return (
         <FlatList
-            data={shorts}
+            data={posts}
             renderItem={renderItem}
             style={styles.container}
             keyExtractor={(item) => item._id}
@@ -54,14 +55,15 @@ const ProfileShortsTab = ({ userId }) => {
 
 const styles = StyleSheet.create({
     container: {
+        flex: 1,
         backgroundColor: "#000"
     },
     image: {
         width: itemSize,
-        height: itemSize * 2,
+        height: itemSize,
         borderWidth: 0.5,
         borderColor: "#ffffff"
     },
 });
 
-export default ProfileShortsTab;
+export default BookmarksPostsTab
