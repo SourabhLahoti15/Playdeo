@@ -36,11 +36,16 @@ function CustomDrawer(props) {
                 <MaterialCommunityIcons name="bookmark-outline" size={24} color="#fff" />
                 <Text style={styles.text}>Bookmarks</Text>
             </Pressable>
+
             {/* about */}
-            <Pressable style={styles.btn}>
+            <Pressable style={styles.btn} onPress={() => {
+                props.navigation.closeDrawer();
+                // props.navigation.getParent()?.navigate("About");
+            }}>
                 <MaterialCommunityIcons name="information-outline" size={24} color="#fff" />
                 <Text style={styles.text}>About</Text>
             </Pressable>
+
             {/* settings */}
             <Pressable style={styles.btn} onPress={() => {
                 props.navigation.closeDrawer();
@@ -49,13 +54,50 @@ function CustomDrawer(props) {
                 <MaterialCommunityIcons name="cog-outline" size={24} color="#fff" />
                 <Text style={styles.text}>Settings</Text>
             </Pressable>
+
             {/* history */}
             <Pressable style={styles.btn} onPress={() => {
                 props.navigation.closeDrawer();
-                props.navigation.getParent()?.navigate("Settings");
+                // props.navigation.getParent()?.navigate("History");
             }}>
                 <MaterialCommunityIcons name="history" size={24} color="#fff" />
                 <Text style={styles.text}>History</Text>
+            </Pressable>
+
+            {/* downloads */}
+            <Pressable style={styles.btn} onPress={() => {
+                props.navigation.closeDrawer();
+                // props.navigation.getParent()?.navigate("Downloads");
+            }}>
+                <MaterialCommunityIcons name="download-outline" size={24} color="#fff" />
+                <Text style={styles.text}>Downloads</Text>
+            </Pressable>
+
+            {/* help */}
+            <Pressable style={styles.btn} onPress={() => {
+                props.navigation.closeDrawer();
+                // props.navigation.getParent()?.navigate("Help");
+            }}>
+                <MaterialCommunityIcons name="help-circle-outline" size={24} color="#fff" />
+                <Text style={styles.text}>Help</Text>
+            </Pressable>
+
+            {/* feedback */}
+            <Pressable style={styles.btn} onPress={() => {
+                props.navigation.closeDrawer();
+                // props.navigation.getParent()?.navigate("Feedback");
+            }}>
+                <MaterialCommunityIcons name="message-text-outline" size={24} color="#fff" />
+                <Text style={styles.text}>Feedback</Text>
+            </Pressable>
+
+            {/* terms */}
+            <Pressable style={styles.btn} onPress={() => {
+                props.navigation.closeDrawer();
+                // props.navigation.getParent()?.navigate("Terms");
+            }}>
+                <MaterialCommunityIcons name="file-document-outline" size={24} color="#fff" />
+                <Text style={styles.text}>Terms of Service</Text>
             </Pressable>
             {/* logout */}
             {token &&

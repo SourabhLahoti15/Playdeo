@@ -4,11 +4,12 @@ import VideoScreen from '../screens/VideoScreen';
 import ShortsScreen from '../screens/ShortsScreen';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import Icon from 'react-native-vector-icons/Ionicons';
-import { View, Pressable, StyleSheet } from 'react-native';
+import { View, Pressable, StyleSheet, Image } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { useContext } from "react";
 import { AuthContext } from "../context/AuthContext";
 import ChatsScreen from '../screens/ChatsScreen';
+import defaultAvatar from '../utils/defaultAvatar';
 
 const HomeTabBarIcon = ({ color, size }) => (
     <Icon name="home-outline" color={color} size={size} />
@@ -43,15 +44,14 @@ const HeaderRight = () => {
     const navigation = useNavigation();
     const { user, token } = useContext(AuthContext);
 
-    const handleUserPress = async () => {
-        if (token) {
-            navigation.navigate("Profile", {
-                userId: user._id
-            });
-        } else {
-            navigation.navigate("Auth");
-        }
+    const handleLoggedInUserPress = () => {
+        navigation.navigate("Profile", {
+            userId: user._id
+        });
     };
+    const handleLoggedOutUserPress = () => {
+        navigation.navigate("Auth");
+    }
     const isDark = true;
     return (
         <View style={styles.header_right}>
@@ -59,9 +59,18 @@ const HeaderRight = () => {
             <Pressable onPress={() => navigation.navigate("Notification")}>
                 <Icon name="notifications-outline" size={30} color="#fff" />
             </Pressable>
-            <Pressable onPress={handleUserPress}>
-                <Icon name="person-circle-outline" size={30} color="#fff" />
-            </Pressable>
+            {token ?
+                <Pressable onPress={() => handleLoggedInUserPress()}>
+                    <Image style={styles.profile_img} source={{
+                        uri: user?.profilePic || defaultAvatar(user?.username)
+                    }}
+                    />
+                </Pressable>
+                :
+                <Pressable onPress={() => handleLoggedOutUserPress()}>
+                    <Icon name="person-circle-outline" size={30} color="#fff" />
+                </Pressable>
+            }
         </View>
     );
 };
@@ -147,7 +156,13 @@ const styles = StyleSheet.create({
         marginRight: 16,
         flexDirection: 'row',
         gap: 16,
-    }
+    },
+    profile_img: {
+        height: 30,
+        width: 30,
+        backgroundColor: "#ffffff30",
+        borderRadius: 999
+    },
 })
 
 export default MainTabs;

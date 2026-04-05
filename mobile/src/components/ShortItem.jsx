@@ -274,8 +274,8 @@ const styles = StyleSheet.create({
         gap: 15
     },
     profile_pic: {
-        height: 50,
-        width: 50,
+        height: 40,
+        width: 40,
         backgroundColor: "#ffffff30",
         borderRadius: 999
     },
@@ -295,7 +295,7 @@ const styles = StyleSheet.create({
     follow_btn_text: {
         color: "white",
         fontWeight: 'bold',
-        fontSize: 15
+        fontSize: 13
     },
     caption: {
         padding: 5,
