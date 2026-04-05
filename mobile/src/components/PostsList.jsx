@@ -3,7 +3,7 @@ import PostCard from "../components/PostCard"
 import { FlatList } from 'react-native'
 import { useRef } from "react";
 import AdBanner from './AdBanner'
-// import AdNative from './AdNative'
+import AdNative from './AdNative'
 
 const PostsList = ({ posts, index = 0, onEndReached }) => {
     const flatListRef = useRef(null);
@@ -20,8 +20,9 @@ const PostsList = ({ posts, index = 0, onEndReached }) => {
     const renderPost = ({ item, index }) => (
         <>
             <PostCard post={item} variant="feed" />
-            {(index + 1) % 5 === 0 && (
-                <AdBanner />
+            {(index + 1) % 1 === 0 && (
+                // <AdBanner />
+                <AdNative />
             )}
         </>
     );
