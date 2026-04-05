@@ -3,7 +3,7 @@ import BASE_URL from '../api/api'
 import PostSkeleton from "../skeletons/PostSkeleton"
 import { PostContext } from '../context/PostContext'
 import PostsList from "../components/PostsList"
-import { FlatList } from 'react-native'
+import { FlatList, StyleSheet } from 'react-native'
 
 const HomeScreen = () => {
   const { posts, setPosts } = useContext(PostContext);
@@ -30,6 +30,7 @@ const HomeScreen = () => {
     return (
       <FlatList
         data={Array(5).fill(0)}
+        style={styles.container}
         keyExtractor={(_, i) => i.toString()}
         renderItem={() => <PostSkeleton />}
       />
@@ -40,5 +41,10 @@ const HomeScreen = () => {
     <PostsList posts={posts} onEndReached={() => setPage(prev => prev + 1)} />
   )
 }
-
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: '#000'
+  },
+})
 export default HomeScreen

@@ -12,9 +12,11 @@ import defaultAvatar from '../utils/defaultAvatar';
 import followUser from '../utils/followUser'
 import unfollowUser from '../utils/unfollowUser'
 import Toast from 'react-native-toast-message';
+import useInterstitialAd from '../hooks/useInterstitialAd';
 
 const VideoCard = ({ video, variant = "feed" }) => {
     const { user, token } = useContext(AuthContext);
+    const { showAd } = useInterstitialAd();
     const { setVideos } = useContext(VideoContext);
 
     const navigation = useNavigation();
@@ -144,6 +146,7 @@ const VideoCard = ({ video, variant = "feed" }) => {
     return (
         <Pressable style={styles.card} onPress={() => {
             if (variant == "feed") {
+                showAd();
                 navigation.navigate("Video", { videoId: video._id });
             }
         }}>

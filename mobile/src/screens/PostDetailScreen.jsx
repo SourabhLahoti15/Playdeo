@@ -6,6 +6,7 @@ import { AuthContext } from '../context/AuthContext'
 import Icon from 'react-native-vector-icons/Ionicons';
 import { SafeAreaView, useSafeAreaInsets } from "react-native-safe-area-context";
 import { PostContext } from "../context/PostContext";
+import defaultAvatar from "../utils/defaultAvatar";
 
 const PostDetailScreen = ({ route }) => {
     const { postId } = route.params;
@@ -74,7 +75,7 @@ const PostDetailScreen = ({ route }) => {
             <View style={styles.comment}>
                 <View style={styles.comment_header}>
                     <View style={styles.comment_header_left}>
-                        <Image style={styles.profile_pic} source={{ uri: `${item.user?.profilePic || "https://i.pravatar.cc/190"}` }} />
+                        <Image style={styles.profile_pic} source={{ uri: `${item.user?.profilePic || defaultAvatar(item.user.username)}` }} />
                         <Text style={styles.username_text}>{item.user.username}</Text>
                     </View>
                     <View style={styles.comment_header_right}>

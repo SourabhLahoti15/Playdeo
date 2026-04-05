@@ -15,7 +15,7 @@ const Drawer = createDrawerNavigator();
 function CustomDrawer(props) {
     const navigation = useNavigation();
     const insets = useSafeAreaInsets();
-    const { user, setUser, setToken } = useContext(AuthContext);
+    const { token, setUser, setToken } = useContext(AuthContext);
 
     const handleLogout = async () => {
         await AsyncStorage.multiRemove(["user", "token"]);
@@ -58,9 +58,11 @@ function CustomDrawer(props) {
                 <Text style={styles.text}>History</Text>
             </Pressable>
             {/* logout */}
-            <Pressable style={[styles.logout_btn, { bottom: insets.bottom }]} onPress={handleLogout}>
-                <Text style={styles.logout_text}>Logout</Text>
-            </Pressable>
+            {token &&
+                <Pressable style={[styles.logout_btn, { bottom: insets.bottom }]} onPress={handleLogout}>
+                    <Text style={styles.logout_text}>Logout</Text>
+                </Pressable>
+            }
         </DrawerContentScrollView>
     );
 }

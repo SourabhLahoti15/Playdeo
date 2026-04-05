@@ -1,4 +1,5 @@
 import { SafeAreaProvider } from 'react-native-safe-area-context';
+import mobileAds from 'react-native-google-mobile-ads';
 import Toast from "react-native-toast-message";
 import ProfileScreen from './src/screens/ProfileScreen';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
@@ -24,11 +25,16 @@ import BookmarksShortsScreen from './src/screens/BookmarksShortsScreen'
 import { Dimensions } from "react-native";
 import SettingsScreen from './src/screens/SettingsScreen';
 import BookmarksScreen from './src/screens/BookmarksScreen';
+import { useEffect } from 'react';
 
 const { width } = Dimensions.get("window");
 
 function App() {
   const Stack = createNativeStackNavigator();
+
+  useEffect(() => {
+    mobileAds().initialize();
+  }, []);
 
   return (
     <GestureHandlerRootView style={{ flex: 1 }}>
